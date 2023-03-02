@@ -1,0 +1,48 @@
+# ----------------------------------------------------------------------------------------------------
+# Copyright (c) 2022 by Enclustra GmbH, Switzerland.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of
+# this hardware, software, firmware, and associated documentation files (the
+# "Product"), to deal in the Product without restriction, including without
+# limitation the rights to use, copy, modify, merge, publish, distribute,
+# sublicense, and/or sell copies of the Product, and to permit persons to whom the
+# Product is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Product.
+#
+# THE PRODUCT IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# PRODUCT OR THE USE OR OTHER DEALINGS IN THE PRODUCT.
+# ----------------------------------------------------------------------------------------------------
+
+# Anios_1
+# set_io -port_name IO1_D0_P             -pin_name A3    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D1_N             -pin_name A4    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D2_P             -pin_name D9    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D3_N             -pin_name C9    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D4_P             -pin_name B10   -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D5_N             -pin_name A10   -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D6_P             -pin_name E10   -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D7_N             -pin_name D10   -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D8_P             -pin_name B9    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D9_N             -pin_name A9    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D10_P            -pin_name F10   -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D11_N            -pin_name F9    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D12_P            -pin_name D6    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D13_N            -pin_name C6    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D14_P            -pin_name E6    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D15_N            -pin_name D5    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D16_P            -pin_name B4    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D17_N            -pin_name B5    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D18_P            -pin_name F4    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D19_N            -pin_name E5    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D20_P            -pin_name D4    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D21_N            -pin_name C4    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D22_P            -pin_name G6    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_D23_N            -pin_name F5    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_CLK1_N           -pin_name D11   -io_std LVCMOS18        -fixed true
+# set_io -port_name IO1_CLK0_P           -pin_name E11   -io_std LVCMOS18        -fixed true

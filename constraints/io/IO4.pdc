@@ -1,0 +1,30 @@
+# ----------------------------------------------------------------------------------------------------
+# Copyright (c) 2022 by Enclustra GmbH, Switzerland.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of
+# this hardware, software, firmware, and associated documentation files (the
+# "Product"), to deal in the Product without restriction, including without
+# limitation the rights to use, copy, modify, merge, publish, distribute,
+# sublicense, and/or sell copies of the Product, and to permit persons to whom the
+# Product is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Product.
+#
+# THE PRODUCT IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# PRODUCT OR THE USE OR OTHER DEALINGS IN THE PRODUCT.
+# ----------------------------------------------------------------------------------------------------
+
+# IO4
+# set_io -port_name IO4_D0_P             -pin_name T3    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO4_D1_N             -pin_name T2    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO4_D2_P             -pin_name T4    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO4_D3_N             -pin_name U4    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO4_D4_P             -pin_name P1    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO4_D5_N             -pin_name R1    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO4_D6_P             -pin_name R3    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO4_D7_N             -pin_name R2    -io_std LVCMOS18        -fixed true
