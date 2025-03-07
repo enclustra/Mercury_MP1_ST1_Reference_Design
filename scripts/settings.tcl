@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------------------------------
-# Copyright (c) 2022 by Enclustra GmbH, Switzerland.
+# Copyright (c) 2025 by Enclustra GmbH, Switzerland.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this hardware, software, firmware, and associated documentation files (the
@@ -21,13 +21,13 @@
 
 # Project settings for Mercury MP1 Reference Design
 # Valid module codes
-# ME-MP1-250-EES-D3E
 # ME-MP1-250-SI-D3EN
 
 # ----------------------------------------------------------------------------------------------------
 # Modify this variable to select your module
-if {![info exists module_name]} {set module_name ME-MP1-250-EES-D3E}
+if {![info exists module_name]} {set module_name ME-MP1-250-SI-D3EN}
 if {![info exists baseboard]}   {set baseboard ST1}
+if {![info exists vivado_dir]}   {set vivado_dir [file join Vivado ${module_name}] }
 # ----------------------------------------------------------------------------------------------------
 
 # ----------------------------------------------------------------------------------------------------
@@ -44,21 +44,12 @@ set mss_config_loc "$install_loc/bin64/pfsoc_mss"
 set local_dir [pwd]
 
 switch $module_name {
-  ME-MP1-250-EES-D3E {
-    set part MPFS250T_ES-FCG1152E 
-    set die MPFS250T_ES
-    set package FCG1152
-    set range EXT
-    set speed STD
-    set PL_DDR DDR4_FPGA
-  }
   ME-MP1-250-SI-D3EN {
     set part MPFS250TS-FCG1152I 
     set die MPFS250TS
     set package FCG1152
     set range IND
     set speed STD
-    set PL_DDR No_PL_DDR
   }
   default {
     puts "$module_name not available"

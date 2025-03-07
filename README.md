@@ -2,11 +2,11 @@
 
 ## Maintainer
 
-Enlustra GmbH [support@enclustra.com]
+Enclustra GmbH [support@enclustra.com]
 
 ## Authors
 
-* Arthur Ruder
+* Enclustra GmbH
 
 ## Documentation
 
@@ -19,4 +19,4 @@ Enlustra GmbH [support@enclustra.com]
 See [Changelog](changelog.md).
 
 ## Description
-This repository contains the necessary files for creating the Enclustra reference design for all supported Mercury MP1 module variants in combination with the Mercury ST1 base board.
+This repository contains the necessary files for creating the Enclustra reference design for all supported Mercury MP1 product models in combination with the Mercury ST1 base board.

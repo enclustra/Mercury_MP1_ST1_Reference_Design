@@ -1,28 +1,13 @@
 /*******************************************************************************
- * Copyright 2019-2021 Microchip FPGA Embedded Systems Solutions.
+ * Copyright 2019 Microchip FPGA Embedded Systems Solutions.
  *
  * SPDX-License-Identifier: MIT
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to
- * deal in the Software without restriction, including without limitation the
- * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
- * sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * @file mss_sys_services.h
+ * @author Microchip FPGA Embedded Systems Solutions
+ * @brief PolarFire SoC Microprocessor Subsystem (MSS) System Services bare
+ * metal driver implementation.
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
- * IN THE SOFTWARE.
- *
- * PolarFire SoC Microprocessor Subsystem(MSS) system services bare metal driver
- * implementation.
  */
 
 /*=========================================================================*//**
@@ -1652,6 +1637,13 @@ MSS_SYS_digest_check
                Below is the list of the possible meaning of spiaddr parameter
                in accordance with the iap_cmd parameter. Please refer function 
                description for more information of spiaddr parameter.
+  @param mb_offset
+                    The mb_offset parameter specifies the offset from the start
+                    of mailbox where the data related to this service is
+                    available. All accesses to the mailbox are of word length
+                    (4 bytes). A value 10 (decimal) of this parameter would
+                    mean that the data access area for this service, in the
+                    mailbox starts from 11th word (offset 10).
   @return
                     This function returns a value to indicate whether the
                     service was executed successfully or not. A zero value
@@ -1665,7 +1657,8 @@ uint16_t
 MSS_SYS_execute_iap
 (
     uint8_t iap_cmd,
-    uint32_t spiaddr
+    uint32_t spiaddr,
+    uint16_t mb_offset
 );
 
 /*-------------------------------------------------------------------------*//**

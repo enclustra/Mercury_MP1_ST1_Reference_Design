@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------------------------------
-# Copyright (c) 2022 by Enclustra GmbH, Switzerland.
+# Copyright (c) 2025 by Enclustra GmbH, Switzerland.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this hardware, software, firmware, and associated documentation files (the
@@ -30,6 +30,8 @@
 # set_io -port_name IO0_D7_N             -pin_name K6    -io_std LVCMOS18        -fixed true
 # set_io -port_name IO0_D8_P             -pin_name K7    -io_std LVCMOS18        -fixed true
 # set_io -port_name IO0_D9_N             -pin_name J8    -io_std LVCMOS18        -fixed true
+# set_io -port_name IO0_CLK_N            -pin_name M10   -io_std LVCMOS18        -fixed true
+# set_io -port_name IO0_CLK_P            -pin_name L9    -io_std LVCMOS18        -fixed true
 # set_io -port_name IO0_D10_P            -pin_name H6    -io_std LVCMOS18        -fixed true
 # set_io -port_name IO0_D11_N            -pin_name G5    -io_std LVCMOS18        -fixed true
 # set_io -port_name IO0_D12_P            -pin_name F2    -io_std LVCMOS18        -fixed true
@@ -44,5 +46,3 @@
 # set_io -port_name IO0_D21_N            -pin_name H2    -io_std LVCMOS18        -fixed true
 # set_io -port_name IO0_D22_P            -pin_name F3    -io_std LVCMOS18        -fixed true
 # set_io -port_name IO0_D23_N            -pin_name G2    -io_std LVCMOS18        -fixed true
-# set_io -port_name IO0_CLK_N            -pin_name M10   -io_std LVCMOS18        -fixed true
-# set_io -port_name IO0_CLK_P            -pin_name L9    -io_std LVCMOS18        -fixed true

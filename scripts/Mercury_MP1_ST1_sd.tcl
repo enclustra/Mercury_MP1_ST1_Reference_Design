@@ -1,5 +1,5 @@
 # ----------------------------------------------------------------------------------------------------
-# Copyright (c) 2022 by Enclustra GmbH, Switzerland.
+# Copyright (c) 2025 by Enclustra GmbH, Switzerland.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this hardware, software, firmware, and associated documentation files (the
@@ -26,9 +26,9 @@ create_smartdesign -sd_name ${sd_name}
 # Disable auto promotion of pins of type 'pad'
 auto_promote_pad_pins -promote_all 0
 # ---------------------------------Generate and import MSS component----------------------------------
-file mkdir [file join ${libero_dir} component MSS_${part}]
-exec ${mss_config_loc} -GENERATE -CONFIGURATION_FILE:[file join ${local_dir} src MSS_${part}.cfg] -OUTPUT_DIR:[file join ${libero_dir} component MSS_${part}]
-import_mss_component -file [file join ${libero_dir} component MSS_${part} ${die}.cxz]
+file mkdir [file join ${libero_dir} component MSS_${module_name}]
+exec ${mss_config_loc} -GENERATE -CONFIGURATION_FILE:[file join ${local_dir} src [string tolower ${module_name}].cfg] -OUTPUT_DIR:[file join ${libero_dir} component MSS_${module_name}]
+import_mss_component -file [file join ${libero_dir} component MSS_${module_name} ${die}.cxz]
 
 # -------------Instantiate IPs and hierarchical SmartDesign in the top level SmartDesign--------------
 # Add Mercury_MP1_CLOCKS_AND_RESETS_i instance
@@ -37,16 +37,6 @@ sd_instantiate_component -sd_name ${sd_name} -component_name {Mercury_MP1_CLOCKS
 sd_instantiate_component -sd_name ${sd_name} -component_name {Mercury_MP1_CORE_APB3_INTERCONNECT} -instance_name {Mercury_MP1_CORE_APB3_INTERCONNECT_i}
 # Add MSS instance
 sd_instantiate_component -sd_name ${sd_name} -component_name ${die} -instance_name {MSS}
-# Add Mercury_MP1_PL_DDR_i instance
-if { $PL_DDR == "DDR4_FPGA"} {
-    sd_instantiate_component -sd_name ${sd_name} -component_name {Mercury_MP1_PL_DDR} -instance_name {Mercury_MP1_PL_DDR_i}
-}
-
-# Add Mercury_MP1_CORE_AXI4_INTERCONNECT_i instance
-if { $PL_DDR == "DDR4_FPGA"} {
-    sd_instantiate_component -sd_name ${sd_name} -component_name {DDR4_FPGA_CORE_AXI4_INTERCONNECT} -instance_name {Mercury_MP1_CORE_AXI4_INTERCONNECT_i}
-}
-
 # Add COREI2C_FPGA_i instance
 sd_instantiate_component -sd_name ${sd_name} -component_name {COREI2C_FPGA} -instance_name {COREI2C_FPGA_i}
 # Add BIBUF_I2C_FPGA_i instance
@@ -119,7 +109,8 @@ sd_create_scalar_port -sd_name ${sd_name} -port_name {MSS_REFCLK_P} -port_direct
 sd_create_scalar_port -sd_name ${sd_name} -port_name {MSS_REFCLK_N} -port_direction {IN} -port_is_pad {1}
 sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4MSS_A} -port_direction {OUT} -port_range {[13:0]} -port_is_pad {1}
 sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4MSS_BA} -port_direction {OUT} -port_range {[1:0]} -port_is_pad {1}
-sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4MSS_DQ} -port_direction {INOUT} -port_range {[35:0]} -port_is_pad {1}
+sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4MSS_DQ} -port_direction {INOUT} -port_range {[31:0]} -port_is_pad {1}
+sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4MSS_DQ_ECC} -port_direction {INOUT} -port_range {[35:32]} -port_is_pad {1}
 sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4MSS_DQS_P} -port_direction {INOUT} -port_range {[4:0]} -port_is_pad {1}
 sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4MSS_DQS_N} -port_direction {INOUT} -port_range {[4:0]} -port_is_pad {1}
 sd_create_scalar_port -sd_name ${sd_name} -port_name {DDR4MSS_ACT_N} -port_direction {OUT} -port_is_pad {1}
@@ -134,40 +125,11 @@ sd_create_scalar_port -sd_name ${sd_name} -port_name {DDR4MSS_RAS_N} -port_direc
 sd_create_scalar_port -sd_name ${sd_name} -port_name {DDR4MSS_RESET_N} -port_direction {OUT} -port_is_pad {1}
 sd_create_scalar_port -sd_name ${sd_name} -port_name {DDR4MSS_WE_N} -port_direction {OUT} -port_is_pad {1}
 
-# Top level scalar ports for FPGA_DDR4_SDRAM
-if { $PL_DDR == "DDR4_FPGA"} {
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {DDR4FPGA_ALERT_N} -port_direction {IN}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {DDR4FPGA_WE_N} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {DDR4FPGA_ACT_N} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {DDR4FPGA_CAS_N} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {DDR4FPGA_RAS_N} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {DDR4FPGA_RESET_N} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {DDR4FPGA_PAR} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {SHIELD0} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {SHIELD1} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {SHIELD2} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {SHIELD3} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {SHIELD4} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {SHIELD5} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {SHIELD6} -port_direction {OUT}
-    sd_create_scalar_port -sd_name ${sd_name} -port_name {SHIELD7} -port_direction {OUT}
-    sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4FPGA_BA} -port_direction {OUT} -port_range {[1:0]}
-    sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4FPGA_BG} -port_direction {OUT} -port_range {[0:0]}
-    sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4FPGA_CKE} -port_direction {OUT} -port_range {[0:0]}
-    sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4FPGA_DQ} -port_direction {INOUT} -port_range {[63:0]}
-    sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4FPGA_ODT} -port_direction {OUT} -port_range {[0:0]}
-    sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4FPGA_A} -port_direction {OUT} -port_range {[13:0]}
-    sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4FPGA_CK_N} -port_direction {OUT} -port_range {[0:0]}
-    sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4FPGA_CK_P} -port_direction {OUT} -port_range {[0:0]}
-    sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4FPGA_CS_N} -port_direction {OUT} -port_range {[0:0]}
-    sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4FPGA_DM} -port_direction {INOUT} -port_range {[7:0]}
-    sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4FPGA_DQS_P} -port_direction {INOUT} -port_range {[7:0]}
-    sd_create_bus_port -sd_name ${sd_name} -port_name {DDR4FPGA_DQS_N} -port_direction {INOUT} -port_range {[7:0]}
-}
-
 # Top level scalar ports for I2C_FPGA
 sd_create_scalar_port -sd_name ${sd_name} -port_name {I2C_SCL_FPGA} -port_direction {INOUT}
 sd_create_scalar_port -sd_name ${sd_name} -port_name {I2C_SDA_FPGA} -port_direction {INOUT}
+sd_instantiate_macro -sd_name ${sd_name} -macro_name {INV} -instance_name {INV_I2C_FPGA_SDA}
+sd_instantiate_macro -sd_name ${sd_name} -macro_name {INV} -instance_name {INV_I2C_FPGA_SCL}
 
 # Top level scalar ports for I2C_PL
 sd_create_scalar_port -sd_name ${sd_name} -port_name {I2C_SCL} -port_direction {INOUT}
@@ -205,20 +167,17 @@ sd_mark_pins_unused -sd_name ${sd_name} -pin_names {MSS:PLL_SGMII_LOCK_M2F}
 sd_mark_pins_unused -sd_name ${sd_name} -pin_names {MSS:PLL_CPU_LOCK_M2F}
 sd_mark_pins_unused -sd_name ${sd_name} -pin_names {MSS:PLL_DDR_LOCK_M2F}
 sd_mark_pins_unused -sd_name ${sd_name} -pin_names {MSS:MSS_INT_M2F}
-sd_connect_pins_to_constant -sd_name ${sd_name} -pin_names {MSS:MSS_INT_F2M} -value {VCC}
 sd_connect_pins_to_constant -sd_name ${sd_name} -pin_names {MSS:MSS_RESET_N_F2M} -value {VCC}
 sd_mark_pins_unused -sd_name ${sd_name} -pin_names {MSS:MSS_RESET_N_M2F}
 
 # Port configuration for FPGA
 sd_mark_pins_unused -sd_name ${sd_name} -pin_names {MSS:FIC_0_AXI4_INITIATOR}
 
-# Port configuration for FPGA_DDR4_SDRAM
-if { $PL_DDR == "DDR4_FPGA"} {
-    sd_clear_pin_attributes -sd_name ${sd_name} -pin_names {MSS:FIC_0_AXI4_INITIATOR}
-}
-
 # Port configuration for I2C_FPGA
-sd_mark_pins_unused -sd_name ${sd_name} -pin_names {COREI2C_FPGA_i:INT}
+sd_create_pin_slices -sd_name ${sd_name} -pin_name {MSS:MSS_INT_F2M} -pin_slices {"[5:5]"}
+sd_connect_pins -sd_name ${sd_name} -pin_names {"COREI2C_FPGA_i:INT" "MSS:MSS_INT_F2M[5:5]"}
+sd_create_pin_slices -sd_name ${sd_name} -pin_name {MSS:MSS_INT_F2M} -pin_slices {"[63:6]"}
+sd_connect_pins_to_constant -sd_name {Mercury_MP1} -pin_names {MSS:MSS_INT_F2M[63:6]} -value {VCC}
 
 # Port configuration for LED
 sd_create_pin_slices -sd_name ${sd_name} -pin_name {Mercury_MP1_GPIO_LED_i:GPIO_OUT} -pin_slices {[0:0]}
@@ -227,6 +186,8 @@ sd_create_pin_slices -sd_name ${sd_name} -pin_name {Mercury_MP1_GPIO_LED_i:GPIO_
 sd_create_pin_slices -sd_name ${sd_name} -pin_name {Mercury_MP1_GPIO_LED_i:GPIO_OUT} -pin_slices {[3:3]}
 sd_mark_pins_unused -sd_name ${sd_name} -pin_names {Mercury_MP1_GPIO_LED_i:INT}
 sd_connect_pins_to_constant -sd_name ${sd_name} -pin_names {Mercury_MP1_GPIO_LED_i:GPIO_IN} -value {GND}
+sd_create_pin_slices -sd_name ${sd_name} -pin_name {MSS:MSS_INT_F2M} -pin_slices {"[4:1]"}
+sd_connect_pins -sd_name ${sd_name} -pin_names {"MSS:MSS_INT_F2M[4:1]" "Mercury_MP1_GPIO_LED_i:INT"}
 
 # Port configuration for TPM
 sd_mark_pins_unused -sd_name ${sd_name} -pin_names {MSS:SPI_0_SS1_OE_M2F}
@@ -235,7 +196,8 @@ sd_mark_pins_unused -sd_name ${sd_name} -pin_names {MSS:SPI_0_DO_OE_M2F}
 
 # Port configuration for UART
 sd_create_pin_slices -sd_name ${sd_name} -pin_name {Mercury_MP1_GPIO_UART_SEL_i:GPIO_OUT} -pin_slices {"[0:0]"}
-sd_mark_pins_unused -sd_name ${sd_name} -pin_names {Mercury_MP1_GPIO_UART_SEL_i:INT}
+sd_create_pin_slices -sd_name ${sd_name} -pin_name {MSS:MSS_INT_F2M} -pin_slices {"[0:0]"}
+sd_connect_pins -sd_name ${sd_name} -pin_names {"MSS:MSS_INT_F2M[0:0]" "Mercury_MP1_GPIO_UART_SEL_i:INT"}
 sd_connect_pins_to_constant -sd_name ${sd_name} -pin_names {Mercury_MP1_GPIO_UART_SEL_i:GPIO_IN} -value {GND}
 
 # ---------------------------------------Create all connections---------------------------------------
@@ -305,6 +267,7 @@ sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4MSS_CK_P" "MSS:CK0"}
 sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4MSS_CK_N" "MSS:CK0_N"}
 sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4MSS_CKE" "MSS:CKE0"}
 sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4MSS_DQ" "MSS:DQ"}
+sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4MSS_DQ_ECC" "MSS:DQ_ECC"}
 sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4MSS_DQS_P" "MSS:DQS"}
 sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4MSS_DQS_N" "MSS:DQS_N"}
 sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4MSS_RAS_N" "MSS:RAS_N"}
@@ -316,58 +279,11 @@ sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4MSS_CS_N" "MSS:CS0_N"}
 # Connections for FPGA
 sd_connect_pins -sd_name ${sd_name} -pin_names {"MSS:FIC_0_ACLK" "Mercury_MP1_CLOCKS_AND_RESETS_i:CLK50"}
 
-# Connections for FPGA_DDR4_SDRAM
-if { $PL_DDR == "DDR4_FPGA"} {
-    sd_connect_pin_to_port -sd_name {Mercury_MP1_CLOCKS_AND_RESETS} -pin_name {INIT_MONITOR_i:DEVICE_INIT_DONE} -port_name {}
-    sd_connect_pin_to_port -sd_name {Mercury_MP1_CLOCKS_AND_RESETS} -pin_name {INIT_MONITOR_i:FABRIC_POR_N} -port_name {}
-    sd_connect_pin_to_port -sd_name {Mercury_MP1_CLOCKS_AND_RESETS} -pin_name {INIT_MONITOR_i:BANK_0_CALIB_STATUS} -port_name {}
-    sd_connect_pin_to_port -sd_name {Mercury_MP1_CLOCKS_AND_RESETS} -pin_name {INIT_MONITOR_i:BANK_8_CALIB_STATUS} -port_name {}
-    sd_connect_pin_to_port -sd_name {Mercury_MP1_CLOCKS_AND_RESETS} -pin_name {CORERESET_i:PLL_POWERDOWN_B} -port_name {}
-    save_smartdesign -sd_name {Mercury_MP1_CLOCKS_AND_RESETS}
-    sd_update_instance -sd_name ${sd_name} -instance_name {Mercury_MP1_CLOCKS_AND_RESETS_i}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_ACT_N" "Mercury_MP1_PL_DDR_i:DDR4FPGA_ACT_N"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_ALERT_N" "Mercury_MP1_PL_DDR_i:DDR4FPGA_ALERT_N"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"Mercury_MP1_CLOCKS_AND_RESETS_i:FABRIC_POR_N" "Mercury_MP1_PL_DDR_i:FPGA_POR_N"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"Mercury_MP1_CLOCKS_AND_RESETS_i:DEVICE_INIT_DONE" "Mercury_MP1_PL_DDR_i:INIT_DONE"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"Mercury_MP1_CLOCKS_AND_RESETS_i:PLL_POWERDOWN_B" "Mercury_MP1_PL_DDR_i:PLL_POWERDOWN_N_0_PL_DDR"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"Mercury_MP1_CLOCKS_AND_RESETS_i:BANK_0_CALIB_STATUS" "Mercury_MP1_PL_DDR_i:BANK_0_CALIB_STATUS"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"Mercury_MP1_CLOCKS_AND_RESETS_i:BANK_8_CALIB_STATUS" "Mercury_MP1_PL_DDR_i:BANK_8_CALIB_STATUS"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"CLK50" "Mercury_MP1_PL_DDR_i:REF_CLK_PL_DDR"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_CAS_N" "Mercury_MP1_PL_DDR_i:DDR4FPGA_CAS_N"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_CKE" "Mercury_MP1_PL_DDR_i:DDR4FPGA_CKE"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_CK_N" "Mercury_MP1_PL_DDR_i:DDR4FPGA_CK_N"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_CK_P" "Mercury_MP1_PL_DDR_i:DDR4FPGA_CK_P"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_CS_N" "Mercury_MP1_PL_DDR_i:DDR4FPGA_CS_N"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_ODT" "Mercury_MP1_PL_DDR_i:DDR4FPGA_ODT"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_PAR" "Mercury_MP1_PL_DDR_i:DDR4FPGA_PAR"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_RAS_N" "Mercury_MP1_PL_DDR_i:DDR4FPGA_RAS_N"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_RESET_N" "Mercury_MP1_PL_DDR_i:DDR4FPGA_RESET_N"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_WE_N" "Mercury_MP1_PL_DDR_i:DDR4FPGA_WE_N"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"SHIELD0" "Mercury_MP1_PL_DDR_i:SHIELD0"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"SHIELD1" "Mercury_MP1_PL_DDR_i:SHIELD1"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"SHIELD2" "Mercury_MP1_PL_DDR_i:SHIELD2"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"SHIELD3" "Mercury_MP1_PL_DDR_i:SHIELD3"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"SHIELD4" "Mercury_MP1_PL_DDR_i:SHIELD4"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"SHIELD5" "Mercury_MP1_PL_DDR_i:SHIELD5"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"SHIELD6" "Mercury_MP1_PL_DDR_i:SHIELD6"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"SHIELD7" "Mercury_MP1_PL_DDR_i:SHIELD7"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_A" "Mercury_MP1_PL_DDR_i:DDR4FPGA_A"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_BA" "Mercury_MP1_PL_DDR_i:DDR4FPGA_BA"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_BG" "Mercury_MP1_PL_DDR_i:DDR4FPGA_BG"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_DM" "Mercury_MP1_PL_DDR_i:DDR4FPGA_DM"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_DQS_N" "Mercury_MP1_PL_DDR_i:DDR4FPGA_DQS_N"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_DQS_P" "Mercury_MP1_PL_DDR_i:DDR4FPGA_DQS_P"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"DDR4FPGA_DQ" "Mercury_MP1_PL_DDR_i:DDR4FPGA_DQ"}
-}
-
-# Connections for FPGA_DDR4_SDRAM
-if { $PL_DDR == "DDR4_FPGA"} {
-    sd_disconnect_pins -sd_name ${sd_name} -pin_names {"MSS:FIC_0_ACLK"}
-}
-
 # Connections for I2C_FPGA
-sd_connect_pins -sd_name ${sd_name} -pin_names {"BIBUF_I2C_FPGA_i:BIBUF_I2C_SCL_E" "COREI2C_FPGA_i:SCLO"}
-sd_connect_pins -sd_name ${sd_name} -pin_names {"BIBUF_I2C_FPGA_i:BIBUF_I2C_SDA_E" "COREI2C_FPGA_i:SDAO"}
+sd_connect_pins -sd_name ${sd_name} -pin_names {"COREI2C_FPGA_i:SCLO" "INV_I2C_FPGA_SCL:A"}
+sd_connect_pins -sd_name ${sd_name} -pin_names {"BIBUF_I2C_FPGA_i:BIBUF_I2C_SCL_E" "INV_I2C_FPGA_SCL:Y"}
+sd_connect_pins -sd_name ${sd_name} -pin_names {"COREI2C_FPGA_i:SDAO" "INV_I2C_FPGA_SDA:A"}
+sd_connect_pins -sd_name ${sd_name} -pin_names {"BIBUF_I2C_FPGA_i:BIBUF_I2C_SDA_E" "INV_I2C_FPGA_SDA:Y"}
 sd_connect_pins -sd_name ${sd_name} -pin_names {"BIBUF_I2C_FPGA_i:BIBUF_I2C_SCL_Y" "COREI2C_FPGA_i:SCLI"}
 sd_connect_pins -sd_name ${sd_name} -pin_names {"BIBUF_I2C_FPGA_i:BIBUF_I2C_SDA_Y" "COREI2C_FPGA_i:SDAI"}
 sd_connect_pins -sd_name ${sd_name} -pin_names {"BIBUF_I2C_FPGA_i:I2C_SCL" "I2C_SCL_FPGA"}
@@ -427,13 +343,6 @@ sd_connect_pins -sd_name ${sd_name} -pin_names {"Mercury_MP1_CLOCKS_AND_RESETS_i
 sd_connect_pins -sd_name ${sd_name} -pin_names {"Mercury_MP1_CLOCKS_AND_RESETS_i:FABRIC_RESET_N" "Mercury_MP1_GPIO_LED_i:PRESETN"}
 
 # -------------------------------------Create all AXI connections-------------------------------------
-if { $PL_DDR == "DDR4_FPGA"} {
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"MSS:FIC_0_ACLK" "Mercury_MP1_PL_DDR_i:SYS_CLK"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"Mercury_MP1_CORE_AXI4_INTERCONNECT_i:AXI4mmaster0" "MSS:FIC_0_AXI4_INITIATOR"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"Mercury_MP1_CORE_AXI4_INTERCONNECT_i:ACLK" "Mercury_MP1_PL_DDR_i:SYS_CLK"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"Mercury_MP1_CORE_AXI4_INTERCONNECT_i:ARESETN" "Mercury_MP1_PL_DDR_i:FABRIC_RESET_N"}
-    sd_connect_pins -sd_name ${sd_name} -pin_names {"Mercury_MP1_CORE_AXI4_INTERCONNECT_i:AXI4mslave0" "Mercury_MP1_PL_DDR_i:AXI4slave0"}
-}
 # Organize everything
 sd_reset_layout -sd_name ${sd_name}
 
